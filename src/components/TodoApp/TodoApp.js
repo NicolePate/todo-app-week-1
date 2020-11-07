@@ -5,24 +5,54 @@ class TodoApp extends Component {
     super(props);
 
     this.state = {
-      isClicked: false
+      isClicked: false,
+      text: '',
+      todos: [],
+     }
+    }
+    componentDidUpdate() {
+      console.log(this.state.todos)
+    }
+  
+    handleClick = () => {
+      this.setState({
+        todos: [...this.state.todos, this.state.text],
+        text: '',
+        })
+ 
     }
 
-    this.handleClick = this.handleClick.bind(this);
-  }
+    handleChange = (evt) => {
+      this.setState({
+          text: evt.target.value,
+        })
+        console.log(this.state.text);
+    }
 
-  handleClick() {
-    this.setState({
-        isClicked: true
-      })
-      console.log(this.state.isClicked);
-  }
+    handleDelete = (evt, todo) => {
+      const filteredTodos = this.state.todos.filter((t) => t !== todo);
+
+      this.setState({
+        todos: filteredTodos,
+      });
+    }
 
   render() {
     return (
+      <div classname='App'>
+      <input type="text" onChange={this.handleChange} value={this.state.text}></input>
       <button onClick={this.handleClick}>Click me</button>
-    )
-  }
+      <ul>
+        {this.state.todos.map((todo, index)  => (
+          <li key= {index}>
+            <span>{todo}</span>
+            <button onClick={(evt) => this.handleDelete(evt, todo)}>X</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 }
 
 export default TodoApp;
